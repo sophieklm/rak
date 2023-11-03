@@ -1,12 +1,11 @@
 # Random Acts of Kindness
 
-Encourages and spreads positivity by suggesting simply acts of kindness.
+Suggesting simple acts of kindness to encourage and spread positivity.
 Promoting goodwill and positive interactions in the community.
+Built using Ruby on Rails with React
 
-- Generates and stores RAK suggestions
+- Generates new RAK suggestions
 - Allows users to save and mark acts they've completed and track their progress
-
-Built using Ruby on Rails with React and Tailwind
 
 ## Development
 
