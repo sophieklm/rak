@@ -91,6 +91,12 @@ GEM
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
+    devise (4.9.3)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
     erubi (1.12.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -105,6 +111,8 @@ GEM
       activesupport (>= 5.0.0)
     jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
     loofah (2.21.4)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -131,6 +139,7 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.4-arm64-darwin)
       racc (~> 1.4)
+    orm_adapter (0.5.0)
     pg (1.5.4)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -181,6 +190,9 @@ GEM
     regexp_parser (2.8.2)
     reline (0.3.9)
       io-console (~> 0.5)
+    responders (3.1.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     rexml (3.2.6)
     rubyzip (2.3.2)
     selenium-webdriver (4.15.0)
@@ -207,6 +219,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -229,8 +243,10 @@ DEPENDENCIES
   capybara
   cssbundling-rails
   debug
+  devise
   jbuilder
   jsbundling-rails
+  jsonapi-serializer
   pg (~> 1.1)
   pry (~> 0.14.2)
   puma (~> 5.0)
