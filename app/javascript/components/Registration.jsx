@@ -22,10 +22,9 @@ export const Registration = () => {
       },
       body: JSON.stringify(body),
     })
-      .then((response) => {
-        if (response.status === 200) {
+      .then((res) => {
+        if (res.status === 200) {
           // TODO: redirect to home page with a flash message
-          console.log("Registration data", response.data);
           window.location.href = "/";
         }
       })

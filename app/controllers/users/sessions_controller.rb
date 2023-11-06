@@ -10,14 +10,16 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    super
+    login!
+  end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    @user = current_user
+    super
+  end
 
   # protected
 
@@ -36,7 +38,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def respond_to_on_destroy
-    if current_user 
+    if @user 
       render json: {
         status: { code: 200, message: 'Logged out successfully.' },
       }, status: :ok
