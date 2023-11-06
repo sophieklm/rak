@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Api
   module V1
@@ -5,7 +6,7 @@ module Api
       before_action :set_user, only: %i[show]
 
       def show
-        render json: @user, include: [:user_acts, :completions]
+        render json: @user, include: %i[user_acts completions]
       end
 
       private

@@ -4,17 +4,21 @@ import { HeartStraight, CheckCircle, PlusCircle } from "phosphor-react";
 import { Tooltip } from "react-tooltip";
 
 const Act = ({ act, user }) => {
-  const userAct = user?.user_acts?.find((userAct) => userAct.act_id === act.id);
+  const [userAct, setUserAct] = React.useState(
+    user?.user_acts?.find((userAct) => userAct.act_id === act.id)
+  );
   const completions = user?.completions?.filter(
     (completion) =>
       completion.act_id === act.id && completion.user_id === user.id
   );
+  const [saved, setSaved] = React.useState(userAct ? true : false);
+  const [completed, setCompleted] = React.useState(completions?.length > 0);
 
   const toggleSave = () => {
-    const url = userAct
-      ? `/api/v1/user_acts/${userAct.id}`
+    const url = saved
+      ? `/api/v1/user_acts/${userAct?.id}`
       : `/api/v1/user_acts`;
-    const method = userAct ? "DELETE" : "POST";
+    const method = saved ? "DELETE" : "POST";
 
     body = {
       act_id: act.id,
@@ -30,9 +34,13 @@ const Act = ({ act, user }) => {
     })
       .then((res) => {
         if (res.ok) {
+          setSaved(!saved);
           return res.json();
         }
         throw new Error("Network response was not ok.");
+      })
+      .then((data) => {
+        setUserAct(data);
       })
       .catch((error) => {
         console.log("Toggle save error", error);
@@ -41,11 +49,7 @@ const Act = ({ act, user }) => {
 
   const onClickComplete = (completeAgain) => {
     const url = `/api/v1/completions`;
-    const method = completeAgain
-      ? "POST"
-      : completions.length > 0
-      ? "DELETE"
-      : "POST";
+    const method = completeAgain ? "POST" : completed ? "DELETE" : "POST";
 
     body = {
       act_id: act.id,
@@ -61,6 +65,7 @@ const Act = ({ act, user }) => {
     })
       .then((res) => {
         if (res.ok) {
+          setCompleted(completeAgain ? true : !completed);
           return res.json();
         }
         throw new Error("Network response was not ok.");
@@ -82,25 +87,25 @@ const Act = ({ act, user }) => {
             <Link as="button" onClick={toggleSave} className="save">
               <HeartStraight
                 size={24}
-                weight={userAct ? "fill" : null}
+                weight={saved ? "fill" : null}
                 color="#0dcaf0"
               />
             </Link>
             <Tooltip anchorSelect=".save" place="bottom">
-              {userAct ? "Unsave" : "Save"}
+              {saved ? "Unsave" : "Save"}
             </Tooltip>
             <Link
               as="button"
               onClick={() => onClickComplete(false)}
-              className={completions.length > 0 ? "uncomplete" : "complete"}
+              className={completed ? "uncomplete" : "complete"}
             >
               <CheckCircle
                 size={24}
-                weight={completions.length > 0 ? "fill" : null}
+                weight={completed ? "fill" : null}
                 color="#0dcaf0"
               />
             </Link>
-            {completions.length > 0 ? (
+            {completed ? (
               <Tooltip anchorSelect=".uncomplete" place="bottom">
                 Uncomplete
               </Tooltip>
@@ -109,7 +114,7 @@ const Act = ({ act, user }) => {
                 Complete
               </Tooltip>
             )}
-            {completions.length > 0 && (
+            {completed && (
               <>
                 <Link
                   as="button"
