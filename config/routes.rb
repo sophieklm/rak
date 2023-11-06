@@ -11,11 +11,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get 'acts/index'
-      post 'acts/create'
-      get '/show/:id', to: 'acts#show'
-      delete '/destroy/:id', to: 'acts#destroy'
-      get 'users/:id', to: 'users#show'
+      resources :acts, only: %i[index create show destroy]
+      resources :users, only: %i[show]
+      resources :user_acts, only: %i[create destroy]
     end
   end
 

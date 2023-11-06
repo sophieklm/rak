@@ -11,7 +11,6 @@ export default () => {
       method: "DELETE",
     })
       .then((res) => {
-        console.log(res);
         if (res.ok) {
           window.location.href = "/";
         }
@@ -68,10 +67,10 @@ export default () => {
             Generate ideas, save suggestions and track random acts of kindness
           </p>
           <button className="btn btn-info text-white font-bold py-2 px-3 rounded">
-            Generate RAK
+            Suggest RAK
           </button>
         </div>
-        <Acts />
+        <Acts user={currentUser} />
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ class Api::V1::ActsController < ApplicationController
     @act&.destroy
     render json: { message: 'RAK deleted!' }
   end
+
   private
 
   def act_params

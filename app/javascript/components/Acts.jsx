@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Act from "./Act";
 
-const Acts = () => {
+const Acts = (props) => {
   const navigate = useNavigate();
-  const [acts, setActs] = useState([]);
+  const [acts, setActs] = React.useState([]);
+  const user = props.user;
+  const userActs = user?.user_acts;
 
-  useEffect(() => {
-    const url = "/api/v1/acts/index";
+  React.useEffect(() => {
+    const url = "/api/v1/acts";
     fetch(url)
       .then((res) => {
         if (res.ok) {
@@ -20,12 +23,7 @@ const Acts = () => {
 
   const allActs = acts.map((act, index) => (
     <div key={index} className="">
-      <div className="card mb-4">
-        <div className="card-body flex-column">
-          <p className="card-title fw-bold">{act.title}:</p>
-          <p className="">{act.description}</p>
-        </div>
-      </div>
+      <Act act={act} user={user} userActs={userActs} />
     </div>
   ));
 

@@ -31,7 +31,7 @@ export const Registration = () => {
       .catch((error) => {
         // TODO: handle errors
         // There was a problem signing up, please try again or login if you already have an account.
-        console.log("registration error", error);
+        console.log("Registration error", error);
       });
 
     setEmail("");
