@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       resources :acts, only: %i[index create show destroy]
       resources :users, only: %i[show]
       resources :user_acts, only: %i[create destroy]
+      resources :completions, only: %i[create]
+      delete '/completions', to: 'completions#destroy'
     end
   end
 

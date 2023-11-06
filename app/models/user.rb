@@ -8,4 +8,5 @@ class User < ApplicationRecord
   validates_uniqueness_of :email
 
   has_many :user_acts
+  has_many :completions
 end

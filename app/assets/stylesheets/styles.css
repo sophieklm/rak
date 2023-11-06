@@ -3,3 +3,7 @@
 .fit-content {
   height: fit-content;
 }
+
+.fill-width {
+  width: -webkit-fill-available;
+}

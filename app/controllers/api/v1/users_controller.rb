@@ -5,7 +5,7 @@ module Api
       before_action :set_user, only: %i[show]
 
       def show
-        render json: @user, include: [:user_acts]
+        render json: @user, include: [:user_acts, :completions]
       end
 
       private

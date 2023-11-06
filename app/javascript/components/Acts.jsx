@@ -6,7 +6,16 @@ const Acts = (props) => {
   const navigate = useNavigate();
   const [acts, setActs] = React.useState([]);
   const user = props.user;
-  const userActs = user?.user_acts;
+  const showSuggested = props.showSuggested;
+  const unsavedActs = acts.filter((act) => {
+    const userAct = user?.user_acts?.find(
+      (userAct) => userAct.act_id === act.id
+    );
+    return !userAct;
+  });
+  const suggestedAct =
+    unsavedActs[Math.floor(Math.random() * unsavedActs.length)];
+  const actsToShow = showSuggested ? [suggestedAct] : acts;
 
   React.useEffect(() => {
     const url = "/api/v1/acts";
@@ -21,20 +30,16 @@ const Acts = (props) => {
       .catch(() => navigate("/"));
   }, []);
 
-  const allActs = acts.map((act, index) => (
+  const allActs = actsToShow.map((act, index) => (
     <div key={index} className="">
-      <Act act={act} user={user} userActs={userActs} />
+      <Act act={act} user={user} />
     </div>
   ));
 
   return (
-    <>
-      <div className="py-5">
-        <main className="container d-flex flex-col justify-content-center">
-          <div className="row col-md-6">{allActs}</div>
-        </main>
-      </div>
-    </>
+    <main className="container d-flex flex-col justify-content-center">
+      <div className="row col-md-6">{allActs}</div>
+    </main>
   );
 };
 
