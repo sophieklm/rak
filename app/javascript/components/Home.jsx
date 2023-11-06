@@ -69,7 +69,7 @@ export default () => {
           <p className="lead pb-4">
             Generate ideas, save suggestions and track random acts of kindness
           </p>
-          <div className="d-flex flex-column gap-2 align-items-center">
+          <div className="d-flex flex-column gap-4 align-items-center">
             <button
               onClick={() => setShowSuggested(true)}
               className="btn btn-info text-white font-bold py-2 px-3 rounded"
@@ -77,7 +77,7 @@ export default () => {
               Suggest RAK
             </button>
             {showSuggested && (
-              <Link onClick={() => setShowSuggested(false)} className="mb-n4">
+              <Link onClick={() => setShowSuggested(false)} className="">
                 Show All
               </Link>
             )}
