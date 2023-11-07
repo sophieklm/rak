@@ -80,7 +80,7 @@ const Acts = (props) => {
 
   return (
     <main className="container d-flex flex-column gap-4 justify-content-center align-items-center">
-      {!showSuggested && (
+      {!showSuggested && user && (
         <Select
           defaultValue={selectedFilter}
           onChange={setSelectedFilter}

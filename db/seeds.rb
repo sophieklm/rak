@@ -8,8 +8,11 @@
 require 'csv'
 
 def run_seeding
-  Act.destroy_all
-  import_raks
+  # Act.destroy_all
+  # import_raks
+
+  create_demo_user
+  create_demo_user_completions(@demo_user)
 end
 
 def import_raks
@@ -22,6 +25,20 @@ def import_raks
     a.save
   end
   puts "There are now #{Act.count} rows in the acts table"
+end
+
+def create_demo_user
+  User.find_by_email("test@test.com")&.destroy
+  @demo_user = User.create!(email: 'test@test.com', password: 'password', password_confirmation: 'password')
+end
+
+def create_demo_user_completions(demo_user)
+  acts = Act.all
+  acts.each do |act|
+    rand(0..10).times do
+      Completion.create!(user_id: demo_user.id, act_id: act.id, created_at: Faker::Time.between(from: Time.new(Time.now.year, 1, 1), to: DateTime.now))
+    end
+  end
 end
 
 run_seeding
