@@ -34,9 +34,9 @@ end
 
 def create_demo_user_completions(demo_user)
   acts = Act.all
-  acts.each do |act|
-    rand(0..10).times do
-      Completion.create!(user_id: demo_user.id, act_id: act.id, created_at: Faker::Time.between(from: Time.new(Time.now.year, 1, 1), to: DateTime.now))
+  acts.sample(10).each do |act|
+    rand(0..20).times do
+      Completion.create!(user_id: demo_user.id, act_id: act.id, created_at: Faker::Time.between(from: DateTime.now - 365.days, to: DateTime.now))
     end
   end
 end

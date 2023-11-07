@@ -5,24 +5,27 @@ import { Link } from "react-router-dom";
 import { currentUserId } from "./index";
 import ActivityCalendar from "react-activity-calendar";
 import { Tooltip } from "react-tooltip";
+import { subDays, addDays } from "date-fns";
 
 export default () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState(undefined);
   const [showSuggested, setShowSuggested] = React.useState(false);
   const date = new Date();
+
   const [data, setData] = React.useState([
     {
-      date: new Date(date.getFullYear(), 0, 1).toISOString().split("T")[0],
+      date: subDays(new Date(), 365).toISOString().split("T")[0],
       count: 0,
       level: 0,
     },
     {
-      date: new Date(date.getFullYear(), 11, 31).toISOString().split("T")[0],
+      date: addDays(new Date(), 1).toISOString().split("T")[0],
       count: 0,
       level: 0,
     },
   ]);
+
   const completions = currentUser?.completions;
 
   const logout = () => {
@@ -117,7 +120,9 @@ export default () => {
                   data={data}
                   theme={theme}
                   showWeekdayLabels
-                  labels={{ totalCount: "{{count}} completed in {{year}}" }}
+                  labels={{
+                    totalCount: "{{count}} completed in the last year",
+                  }}
                   renderBlock={(block, activity) =>
                     React.cloneElement(block, {
                       "data-tooltip-id": "react-tooltip",

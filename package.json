@@ -6,6 +6,7 @@
     "@hotwired/turbo-rails": "^7.3.0",
     "autoprefixer": "^10.4.16",
     "bootstrap": "^5.3.2",
+    "date-fns": "^2.30.0",
     "esbuild": "^0.19.5",
     "phosphor-react": "^1.4.1",
     "postcss": "^8.4.31",
