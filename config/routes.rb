@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :user_acts, only: %i[create destroy]
       resources :completions, only: %i[create]
       delete '/completions', to: 'completions#destroy'
+      resources :open_ai, only: %i[create]
     end
   end
 

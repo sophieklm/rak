@@ -76,7 +76,7 @@ const Act = ({ act, user }) => {
   };
 
   return (
-    <div className="card mb-4">
+    <div className="card mb-4 border-blue">
       <div className="d-flex card-body flex-row justify-content-between">
         <div>
           <p className="card-title fw-bold">{act.title}:</p>
@@ -84,14 +84,18 @@ const Act = ({ act, user }) => {
         </div>
         {user && (
           <div className="d-flex flex-row gap-2 fit-content">
-            <Link as="button" onClick={toggleSave} className="save">
+            <Link
+              as="button"
+              onClick={toggleSave}
+              className={saved ? "unsave" : "save"}
+            >
               <HeartStraight
                 size={24}
                 weight={saved ? "fill" : null}
                 color="#0dcaf0"
               />
             </Link>
-            <Tooltip anchorSelect=".save" place="bottom">
+            <Tooltip anchorSelect={saved ? ".unsave" : ".save"} place="bottom">
               {saved ? "Unsave" : "Save"}
             </Tooltip>
             <Link
@@ -105,15 +109,12 @@ const Act = ({ act, user }) => {
                 color="#0dcaf0"
               />
             </Link>
-            {completed ? (
-              <Tooltip anchorSelect=".uncomplete" place="bottom">
-                Uncomplete
-              </Tooltip>
-            ) : (
-              <Tooltip anchorSelect=".complete" place="bottom">
-                Complete
-              </Tooltip>
-            )}
+            <Tooltip
+              anchorSelect={completed ? ".uncomplete" : ".complete"}
+              place="bottom"
+            >
+              {completed ? "Uncomplete" : "Complete"}
+            </Tooltip>
             {completed && (
               <>
                 <Link

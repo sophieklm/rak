@@ -7,3 +7,7 @@
 .fill-width {
   width: -webkit-fill-available;
 }
+
+.border-blue {
+  border-color: #0dcaf0;
+}

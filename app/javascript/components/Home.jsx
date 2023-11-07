@@ -5,13 +5,15 @@ import { Link } from "react-router-dom";
 import { currentUserId } from "./index";
 import ActivityCalendar from "react-activity-calendar";
 import { Tooltip } from "react-tooltip";
-import { subDays, addDays } from "date-fns";
+import { subDays, addDays, set } from "date-fns";
+import { HeartStraight, Sparkle } from "phosphor-react";
 
 export default () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState(undefined);
   const [showSuggested, setShowSuggested] = React.useState(false);
-  const date = new Date();
+  const [generatedAct, setGeneratedAct] = React.useState(undefined);
+  const [loading, setLoading] = React.useState(false);
 
   const [data, setData] = React.useState([
     {
@@ -43,6 +45,31 @@ export default () => {
       });
   };
 
+  const getOpenAiResponse = () => {
+    const url = "/api/v1/open_ai";
+    setGeneratedAct(undefined);
+    setLoading(true);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((res) => {
+        setGeneratedAct(res);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log("Open AI error", error);
+      });
+  };
+
   React.useEffect(() => {
     if (!currentUserId) return;
     const url = `/api/v1/users/${currentUserId}`;
@@ -58,6 +85,11 @@ export default () => {
   }, [currentUserId]);
 
   React.useEffect(() => {
+    // setGeneratedAct({
+    //   title: "Donate Books to a Local Library",
+    //   description:
+    //     "Gather some books that you no longer need and donate them to your local library to share the joy of reading with others.",
+    // });
     completions?.forEach((completion) => {
       const date = new Date(completion.created_at);
       const year = date.getFullYear();
@@ -133,12 +165,25 @@ export default () => {
                 <Tooltip id="react-tooltip" />
               </>
             )}
-            <button
-              onClick={() => setShowSuggested(true)}
-              className="btn btn-info text-white font-bold py-2 px-3 rounded"
-            >
-              Suggest RAK
-            </button>
+            <div className="d-flex gap-4">
+              <button
+                onClick={() => {
+                  setGeneratedAct(undefined);
+                  setShowSuggested(true);
+                }}
+                className="btn btn-info text-white font-bold py-2 px-3 rounded"
+              >
+                Suggest RAK
+              </button>
+              {currentUser && (
+                <button
+                  onClick={() => getOpenAiResponse()}
+                  className="btn btn-info text-white font-bold py-2 px-3 rounded"
+                >
+                  Generate RAK
+                </button>
+              )}
+            </div>
             {showSuggested && (
               <Link onClick={() => setShowSuggested(false)} className="">
                 Show All
@@ -146,9 +191,52 @@ export default () => {
             )}
           </div>
         </div>
+        {loading && (
+          <div className="d-flex justify-content-center mb-4">
+            <div className="spinner-border text-info" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        {generatedAct && (
+          <main className="container d-flex flex-column align-items-center">
+            <div className="row col-md-6">
+              <div>
+                <div className="card mb-4 border-blue">
+                  <div className="d-flex card-body flex-row justify-content-between">
+                    <div>
+                      <p className="card-title fw-bold">
+                        {generatedAct.title}:
+                      </p>
+                      <p className="">{generatedAct.description}</p>
+                    </div>
+                    <div className="d-flex flex-row gap-2 fit-content">
+                      <Link as="button" onClick="" className="save">
+                        <HeartStraight
+                          size={24}
+                          weight={null}
+                          color="#0dcaf0"
+                        />
+                      </Link>
+                      <Tooltip anchorSelect=".save" place="bottom">
+                        Save
+                      </Tooltip>
+                      <Sparkle size={24} color="#0dcaf0" className="ai" />
+                      <Tooltip anchorSelect=".ai" place="bottom">
+                        AI Generated
+                      </Tooltip>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        )}
+        {/* {!generatedAct && !loading && ( */}
         <div className="fill-width">
           <Acts user={currentUser} showSuggested={showSuggested} />
         </div>
+        {/* )} */}
       </div>
     </div>
   );
