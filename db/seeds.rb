@@ -8,8 +8,7 @@
 require 'csv'
 
 def run_seeding
-  # Act.destroy_all
-  # import_raks
+  import_raks
 
   create_demo_user
   create_demo_user_completions(@demo_user)
@@ -19,9 +18,7 @@ def import_raks
   csv_text = File.read(Rails.root.join('lib', 'seeds', 'raks.csv'))
   csv = CSV.parse(csv_text, headers: true, encoding: 'utf-8')
   csv.each do |row|
-    a = Act.new
-    a.title = row['title']
-    a.description = row['description']
+    a = Act.find_or_create_by(title: row['title'], description: row['description'])
     a.save
   end
   puts "There are now #{Act.count} rows in the acts table"

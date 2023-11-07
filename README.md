@@ -1,11 +1,13 @@
 # Random Acts of Kindness
 
 Suggesting simple acts of kindness to encourage and spread positivity.
-Promoting goodwill and positive interactions in the community.
+
 Built using Ruby on Rails with React
 
-- Generates new RAK suggestions
-- Allows users to save and mark acts they've completed and track their progress
+- Save and mark acts completed and track your progress
+- Generate new RAK suggestions using OpenAI
+
+<img src="./rak.gif" alt="gif" height="500">
 
 ## Development
 
