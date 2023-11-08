@@ -92,13 +92,15 @@ const Acts = (props) => {
   return (
     <main className="container d-flex flex-column gap-4 justify-content-center align-items-center">
       <div className="d-flex flex-row gap-4 fill-width justify-content-center">
-        <input
-          className=" col-md-2 rounded border-info"
-          value={searchTerm}
-          onChange={(e) => getSearchResults(e.target.value)}
-          type="text"
-          placeholder="Search..."
-        />
+        {!showSuggested && (
+          <input
+            className=" col-md-2 rounded border-info"
+            value={searchTerm}
+            onChange={(e) => getSearchResults(e.target.value)}
+            type="text"
+            placeholder="Search..."
+          />
+        )}
         {!showSuggested && user && (
           <Select
             defaultValue={selectedFilter}

@@ -1,6 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { HeartStraight, CheckCircle, PlusCircle } from "phosphor-react";
+import {
+  HeartStraight,
+  CheckCircle,
+  PlusCircle,
+  Sparkle,
+} from "phosphor-react";
 import { Tooltip } from "react-tooltip";
 
 const Act = ({ act, user }) => {
@@ -126,6 +131,14 @@ const Act = ({ act, user }) => {
                 </Link>
                 <Tooltip anchorSelect=".complete-again" place="bottom">
                   Complete Again
+                </Tooltip>
+              </>
+            )}
+            {act.ai_generated && (
+              <>
+                <Sparkle size={24} color="#0dcaf0" className="ai" />
+                <Tooltip anchorSelect=".ai" place="bottom">
+                  AI Generated
                 </Tooltip>
               </>
             )}

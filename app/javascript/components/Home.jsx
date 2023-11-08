@@ -202,7 +202,7 @@ export default () => {
             Random Acts of Kindness
           </h2>
           <p className="lead pb-4">
-            Generate ideas, save suggestions and track random acts of kindness
+            Generate ideas, save suggestions and track completions
           </p>
           <div className="d-flex flex-column gap-4 align-items-center">
             {currentUser && (
