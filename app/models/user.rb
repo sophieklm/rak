@@ -11,4 +11,5 @@ class User < ApplicationRecord
 
   has_many :user_acts, dependent: :destroy
   has_many :completions, dependent: :destroy
+  has_many :acts
 end

@@ -31,7 +31,7 @@ module Api
       private
 
       def act_params
-        params.permit(:title, :description)
+        params.permit(:title, :description, :user_id, :ai_generated)
       end
 
       def set_act

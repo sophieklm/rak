@@ -14,6 +14,7 @@ export default () => {
   const [showSuggested, setShowSuggested] = React.useState(false);
   const [generatedAct, setGeneratedAct] = React.useState(undefined);
   const [loading, setLoading] = React.useState(false);
+  const [acts, setActs] = React.useState([]);
 
   const [data, setData] = React.useState([
     {
@@ -27,6 +28,10 @@ export default () => {
       level: 0,
     },
   ]);
+
+  const theme = {
+    dark: ["#272f30", "#0dcaf0", "#0df0bb", "#f3d841", "#f3418a"],
+  };
 
   const completions = currentUser?.completions;
 
@@ -70,6 +75,51 @@ export default () => {
       });
   };
 
+  const saveAct = () => {
+    const url = `/api/v1/acts`;
+    const method = "POST";
+    fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...generatedAct,
+        user_id: currentUser.id,
+        ai_generated: true,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((data) => {
+        setGeneratedAct(undefined);
+        fetch(`/api/v1/user_acts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            act_id: data.id,
+            user_id: currentUser.id,
+          }),
+        }).then((res) => {
+          if (res.ok) {
+            console.log("Saved act", data);
+            setActs([...acts, data]);
+            return res.json();
+          }
+          throw new Error("Network response was not ok.");
+        });
+      })
+      .catch((error) => {
+        console.log("Save act error", error);
+      });
+  };
+
   React.useEffect(() => {
     if (!currentUserId) return;
     const url = `/api/v1/users/${currentUserId}`;
@@ -110,9 +160,18 @@ export default () => {
     setData([...data]);
   }, [completions]);
 
-  const theme = {
-    dark: ["#272f30", "#0dcaf0", "#0df0bb", "#f3d841", "#f3418a"],
-  };
+  React.useEffect(() => {
+    const url = "/api/v1/acts";
+    fetch(url)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((res) => setActs(res))
+      .catch(() => navigate("/"));
+  }, []);
 
   return (
     <div className="align-items-center justify-content-center">
@@ -211,7 +270,7 @@ export default () => {
                       <p className="">{generatedAct.description}</p>
                     </div>
                     <div className="d-flex flex-row gap-2 fit-content">
-                      <Link as="button" onClick="" className="save">
+                      <Link as="button" onClick={saveAct} className="save">
                         <HeartStraight
                           size={24}
                           weight={null}
@@ -232,11 +291,9 @@ export default () => {
             </div>
           </main>
         )}
-        {/* {!generatedAct && !loading && ( */}
         <div className="fill-width">
-          <Acts user={currentUser} showSuggested={showSuggested} />
+          <Acts user={currentUser} acts={acts} showSuggested={showSuggested} />
         </div>
-        {/* )} */}
       </div>
     </div>
   );

@@ -12,9 +12,8 @@ const filterOptions = [
 ];
 
 const Acts = (props) => {
-  const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = React.useState(null);
-  const [acts, setActs] = React.useState([]);
+  const acts = props.acts;
   const user = props.user;
   const showSuggested = props.showSuggested;
 
@@ -65,18 +64,9 @@ const Acts = (props) => {
     ? [suggestedAct]
     : filterActs(selectedFilter);
 
-  React.useEffect(() => {
-    const url = "/api/v1/acts";
-    fetch(url)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Network response was not ok.");
-      })
-      .then((res) => setActs(res))
-      .catch(() => navigate("/"));
-  }, []);
+  const sortedActs = actsToShow.sort((a, b) =>
+    a.created_at < b.created_at ? 1 : -1
+  );
 
   return (
     <main className="container d-flex flex-column gap-4 justify-content-center align-items-center">
@@ -90,7 +80,7 @@ const Acts = (props) => {
         />
       )}
       <div className="row col-md-6">
-        {actsToShow.map((act) => (
+        {sortedActs.map((act) => (
           <div key={act.id}>
             <Act act={act} user={user} />
           </div>
