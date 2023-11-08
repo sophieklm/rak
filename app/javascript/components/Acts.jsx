@@ -12,10 +12,11 @@ const filterOptions = [
 ];
 
 const Acts = (props) => {
+  const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = React.useState(null);
-  const acts = props.acts;
-  const user = props.user;
-  const showSuggested = props.showSuggested;
+  const { acts, user, showSuggested } = props;
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchResults, setSearchResults] = React.useState([]);
 
   const filterActs = (selectedFilter) => {
     if (!selectedFilter) return acts;
@@ -62,23 +63,63 @@ const Acts = (props) => {
 
   const actsToShow = showSuggested
     ? [suggestedAct]
+    : searchTerm
+    ? searchResults
     : filterActs(selectedFilter);
 
   const sortedActs = actsToShow.sort((a, b) =>
     a.created_at < b.created_at ? 1 : -1
   );
 
+  const getSearchResults = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    console.log(searchTerm);
+    fetch(`/api/v1/search?q=${searchTerm}`)
+      .then((res) => {
+        if (res.ok) {
+          console.log(res);
+          return res.json();
+        }
+        throw new Error("Network error");
+      })
+      .then((res) => {
+        console.log(res);
+        setSearchResults(res);
+      })
+      .catch(() => navigate("/"));
+  };
+
   return (
     <main className="container d-flex flex-column gap-4 justify-content-center align-items-center">
-      {!showSuggested && user && (
-        <Select
-          defaultValue={selectedFilter}
-          onChange={setSelectedFilter}
-          options={filterOptions}
-          className="row col-md-2"
-          placeholder="Filter"
+      <div className="d-flex flex-row gap-4 fill-width justify-content-center">
+        <input
+          className=" col-md-2 rounded border-info"
+          value={searchTerm}
+          onChange={(e) => getSearchResults(e.target.value)}
+          type="text"
+          placeholder="Search..."
         />
-      )}
+        {!showSuggested && user && (
+          <Select
+            defaultValue={selectedFilter}
+            onChange={setSelectedFilter}
+            options={filterOptions}
+            className="col-md-2 rounded border-info h-full"
+            placeholder="Filter"
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                borderRadius: "0.25rem",
+                borderColor: "#0DCAF0",
+              }),
+              valueContainer: (baseStyles, state) => ({
+                ...baseStyles,
+                minHeight: "inherit",
+              }),
+            }}
+          />
+        )}
+      </div>
       <div className="row col-md-6">
         {sortedActs.map((act) => (
           <div key={act.id}>

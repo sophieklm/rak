@@ -28,6 +28,11 @@ module Api
         render json: { message: 'RAK deleted!' }
       end
 
+      def search
+        @acts = Act.ransack(title_or_description_cont: params[:q]).result(distinct: true)
+        render json: @acts
+      end
+
       private
 
       def act_params

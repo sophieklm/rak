@@ -8,4 +8,12 @@ class Act < ApplicationRecord
   has_many :completions, dependent: :destroy
 
   belongs_to :user
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["description", "title"]
+  end
+  
+  def self.ransackable_associations(auth_object = nil)
+    []
+  end
 end
